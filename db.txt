@@ -1,0 +1,36 @@
+CREATE TABLE log (
+	id integer NOT NULL,
+	codigo varchar(50) NOT NULL,
+	operacao varchar(50) NOT NULL,
+	data DATE NOT NULL,
+	CONSTRAINT pk_log PRIMARY KEY (id)
+);
+
+CREATE SEQUENCE log_id_seq
+	INCREMENT 1
+	MINVALUE 1
+ 	MAXVALUE 9223372036854775807
+ 	START 1
+ 	CACHE 1;
+
+ALTER TABLE log ALTER COLUMN id SET DEFAULT NEXTVAL('log_id_seq'::regclass);
+
+CREATE TABLE pedido_venda(
+	codigo INTEGER NOT NULL,
+	codigo_produto INTEGER NOT NULL,
+	cpf_cliente VARCHAR(11),
+	quantidade integer NOT NULL,
+	data DATE NOT NULL,
+	valor FLOAT NOT NULL,
+	CONSTRAINT pk_pedido_venda PRIMARY KEY (codigo)
+);
+
+
+CREATE SEQUENCE pedido_venda_cod_seq
+	INCREMENT 1
+	MINVALUE 1
+ 	MAXVALUE 9223372036854775807
+ 	START 1
+ 	CACHE 1;
+
+ALTER TABLE pedido_venda ALTER COLUMN codigo SET DEFAULT NEXTVAL('pedido_venda_cod_seq'::regclass);
