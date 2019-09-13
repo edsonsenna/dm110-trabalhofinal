@@ -17,6 +17,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Session;
 
+import br.inatel.dm110.log.entities.Log;
 import br.inatel.dm110.pedidovenda.dao.PedidoVendaDAO;
 import br.inatel.dm110.pedidovenda.entities.PedidoVenda;
 import br.inatel.dm110.pedidovenda.interfaces.IPedidoVendaLocal;
@@ -114,8 +115,14 @@ public class PedidoVendaBean implements IPedidoVendaLocal, IPedidoVendaRemote {
 			Session session = conn.createSession();
 
 			MessageProducer producer = session.createProducer(queue);
+			
+			Log log = new Log();
+			
+			log.setCodigo(Integer.toString(pedido.getCodigo()));
+			log.setOperacao("Insercao");
+			log.setData(LocalDate.now());
 
-			ObjectMessage msg = session.createObjectMessage(pedido);
+			ObjectMessage msg = session.createObjectMessage(log);
 
 			producer.send(msg);
 
@@ -135,8 +142,14 @@ public class PedidoVendaBean implements IPedidoVendaLocal, IPedidoVendaRemote {
 			Session session = conn.createSession();
 
 			MessageProducer producer = session.createProducer(queue);
+			
+			Log log = new Log();
+			
+			log.setCodigo(Integer.toString(pedido.getCodigo()));
+			log.setOperacao("Atualizacao");
+			log.setData(LocalDate.now());
 
-			ObjectMessage msg = session.createObjectMessage(pedido);
+			ObjectMessage msg = session.createObjectMessage(log);
 
 			producer.send(msg);
 

@@ -39,50 +39,30 @@ public class PedidoVendaMDB implements MessageListener {
 	private LogDAO dao;
 
 	@Override
-	public void onMessage(Message pedidovenda) {
+	public void onMessage(Message log) {
 		// TODO Auto-generated method stub
 			
-		if(pedidovenda instanceof ObjectMessage) {
+		if(log instanceof ObjectMessage) {
 			
 			
 			try {
-				ObjectMessage objMsg = (ObjectMessage) pedidovenda;
+				ObjectMessage objMsg = (ObjectMessage) log;
 				
 				Object object = objMsg.getObject();
 				
-				if(object instanceof PedidoVendaTO) {
+				if(object instanceof Log) {
 					
-					PedidoVendaTO pedidoVendaTO = (PedidoVendaTO) object;
-					
-					System.out.println("Iniciando processamento do MDB...");
-					
-					Thread.sleep(1500);
-					
-					System.out.println("Recebendo objeto: "+ pedidoVendaTO.toString());
+					Log logd = (Log) object;
 					
 					
-					
-					Log log = new Log();
-					
-					log.setCodigo(Integer.toString(pedidoVendaTO.getCodigo()));
-					log.setOperacao("Operacao Default");
-					log.setData(LocalDate.now());
-					
-					dao.insert(log);
+					dao.insert(logd);
 					
 					System.out.println(log.toString());
-					
-					Thread.sleep(1500);
-
-					System.out.println("Objeto recebido!");
 				
 				}
 				
 				
 			} catch (JMSException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
