@@ -14,7 +14,6 @@ public class LogDAO {
 	private EntityManager em;
 	
 	public void insert(Log log) {
-		System.out.println(log.toString());
 		em.persist(log);
 	}
 	

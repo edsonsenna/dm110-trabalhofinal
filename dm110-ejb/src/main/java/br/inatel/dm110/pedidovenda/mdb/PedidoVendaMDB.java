@@ -64,7 +64,6 @@ public class PedidoVendaMDB implements MessageListener {
 					
 					Log log = new Log();
 					
-					log.setId(1);
 					log.setCodigo(Integer.toString(pedidoVendaTO.getCodigo()));
 					log.setOperacao("Operacao Default");
 					log.setData(LocalDate.now());
