@@ -23,103 +23,127 @@ import br.inatel.dm110.pedidovenda.interfaces.IPedidoVendaLocal;
 import br.inatel.dm110.pedidovenda.interfaces.IPedidoVendaRemote;
 import br.inatel.dm110.pedidovenda.to.PedidoVendaTO;
 
-
 @Stateless
 @Remote(IPedidoVendaRemote.class)
 @Local(IPedidoVendaLocal.class)
-public class PedidoVendaBean implements IPedidoVendaLocal, IPedidoVendaRemote{
-	
+public class PedidoVendaBean implements IPedidoVendaLocal, IPedidoVendaRemote {
+
 	@EJB
 	private PedidoVendaDAO dao;
-	
+
 	@Resource(lookup = "java:/ConnectionFactory")
 	private ConnectionFactory connFactory;
-	
+
 	@Resource(lookup = "java:/jms/queue/dm110pedidovenda")
 	private Queue queue;
 
-	
 	@Override
 	public List<PedidoVendaTO> listAll() {
-		
+
 		ArrayList<PedidoVendaTO> list = new ArrayList<>();
-		for(PedidoVenda pedidovenda : dao.listAll()) {
+		for (PedidoVenda pedidovenda : dao.listAll()) {
 			PedidoVendaTO pv = new PedidoVendaTO();
-			
+
 			pv.setCodigo(pedidovenda.getCodigo());
 			pv.setCodigo_produto(pedidovenda.getCodigo_produto());
 			pv.setCpf_cliente(pedidovenda.getCpf_cliente());
 			pv.setData(pedidovenda.getData());
 			pv.setQuantidade(pedidovenda.getQuantidade());
 			pv.setValor(pedidovenda.getValor());
-			
+
 			list.add(pv);
 		}
-		
+
 		return list;
 	}
 
 	@Override
-	public void insert(PedidoVendaTO pedidovenda) {
-		// TODO Auto-generated method stub
-		
+	public void insert(PedidoVendaTO pedidoVenda) {
 		PedidoVenda pv = new PedidoVenda();
-		
-		pv.setCodigo(pedidovenda.getCodigo());
-		pv.setCodigo_produto(pedidovenda.getCodigo_produto());
-		pv.setCpf_cliente(pedidovenda.getCpf_cliente());
+
+		pv.setCodigo(pedidoVenda.getCodigo());
+		pv.setCodigo_produto(pedidoVenda.getCodigo_produto());
+		pv.setCpf_cliente(pedidoVenda.getCpf_cliente());
 		pv.setData(LocalDate.now());
-		pv.setQuantidade(pedidovenda.getQuantidade());
-		pv.setValor(pedidovenda.getValor());
-		
+		pv.setQuantidade(pedidoVenda.getQuantidade());
+		pv.setValor(pedidoVenda.getValor());
+
 		dao.insert(pv);
-		
-		this.sendStateCreated(pedidovenda);
-		
+
+		this.sendStateCreated(pedidoVenda);
+
 	}
 
 	@Override
-	public void atualiza(PedidoVendaTO pedido) {
-		// TODO Auto-generated method stub
-		
+	public void atualiza(PedidoVendaTO pedidoVenda) {
+		PedidoVenda pv = new PedidoVenda();
+		pv.setCodigo(pedidoVenda.getCodigo());
+		pv.setCodigo_produto(pedidoVenda.getCodigo_produto());
+		pv.setCpf_cliente(pedidoVenda.getCpf_cliente());
+		pv.setData(LocalDate.now());
+		pv.setQuantidade(pedidoVenda.getQuantidade());
+		pv.setValor(pedidoVenda.getValor());
+
+		dao.atualiza(pv);
+		this.sendStateUpdated(pedidoVenda);
 	}
 
 	@Override
 	public PedidoVendaTO buscaUnico(int codigo) {
-		PedidoVenda pedidovenda = dao.buscaUnico(codigo);
-		
+		PedidoVenda pedidoVenda = dao.buscaUnico(codigo);
+
 		PedidoVendaTO pv = new PedidoVendaTO();
-		
-		pv.setCodigo(pedidovenda.getCodigo());
-		pv.setCodigo_produto(pedidovenda.getCodigo_produto());
-		pv.setCpf_cliente(pedidovenda.getCpf_cliente());
-		pv.setData(pedidovenda.getData());
-		pv.setQuantidade(pedidovenda.getQuantidade());
-		pv.setValor(pedidovenda.getValor());
-		
+
+		pv.setCodigo(pedidoVenda.getCodigo());
+		pv.setCodigo_produto(pedidoVenda.getCodigo_produto());
+		pv.setCpf_cliente(pedidoVenda.getCpf_cliente());
+		pv.setData(pedidoVenda.getData());
+		pv.setQuantidade(pedidoVenda.getQuantidade());
+		pv.setValor(pedidoVenda.getValor());
+
 		return pv;
 	}
-	
-	public void sendStateCreated(PedidoVendaTO pedido){
-		
+
+	public void sendStateCreated(PedidoVendaTO pedido) {
+
 		System.out.println("pedido created!");
-		
+
 		try {
 			Connection conn = connFactory.createConnection();
-			
+
 			Session session = conn.createSession();
-			
+
 			MessageProducer producer = session.createProducer(queue);
-			
+
 			ObjectMessage msg = session.createObjectMessage(pedido);
-			
+
 			producer.send(msg);
-			
-		}catch(JMSException e) {
+
+		} catch (JMSException e) {
 			e.printStackTrace();
 		}
-		
-		
+
+	}
+
+	public void sendStateUpdated(PedidoVendaTO pedido) {
+
+		System.out.println("pedido updated!");
+
+		try {
+			Connection conn = connFactory.createConnection();
+
+			Session session = conn.createSession();
+
+			MessageProducer producer = session.createProducer(queue);
+
+			ObjectMessage msg = session.createObjectMessage(pedido);
+
+			producer.send(msg);
+
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }

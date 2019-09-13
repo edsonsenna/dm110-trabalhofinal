@@ -22,7 +22,7 @@ public interface IPedidoVendaService {
 	public void criarPedidoVenda(PedidoVendaTO pedido);
 	
 	@PUT
-	@Path("/{codigo}")
+	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void atualizarPedidoVenda(PedidoVendaTO pedido);
 	

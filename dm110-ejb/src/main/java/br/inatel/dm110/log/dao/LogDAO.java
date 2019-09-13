@@ -10,12 +10,10 @@ import br.inatel.dm110.log.entities.Log;
 @Stateless
 public class LogDAO {
 	
-	
-	@PersistenceContext(unitName="ibge_pu")
+	@PersistenceContext(unitName="trabalhoFinal_pu")
 	private EntityManager em;
 	
 	public void insert(Log log) {
-
 		System.out.println(log.toString());
 		em.persist(log);
 	}

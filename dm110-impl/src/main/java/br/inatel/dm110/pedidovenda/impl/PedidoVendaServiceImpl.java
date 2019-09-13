@@ -17,25 +17,21 @@ public class PedidoVendaServiceImpl implements IPedidoVendaService {
 
 	@Override
 	public void criarPedidoVenda(PedidoVendaTO pedido) {
-		// TODO Auto-generated method stub
 		pedidoBean.insert(pedido);
 	}
 
 	@Override
 	public void atualizarPedidoVenda(PedidoVendaTO pedido) {
-		// TODO Auto-generated method stub
 		pedidoBean.atualiza(pedido);
 	}
 
 	@Override
 	public PedidoVendaTO buscaPedidoVenda(int codigo) {
-		// TODO Auto-generated method stub
 		return pedidoBean.buscaUnico(codigo);
 	}
 
 	@Override
 	public List<PedidoVendaTO> buscaPedidosVenda() {
-		// TODO Auto-generated method stub
 		return pedidoBean.listAll();
 	}
 
