@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 
@@ -18,6 +19,7 @@ public class PedidoVenda implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
+	@SequenceGenerator(name="pedido_venda_cod_seq", initialValue=1, allocationSize=1)
 	private int codigo;
 	private int codigo_produto;
 	private String cpf_cliente;

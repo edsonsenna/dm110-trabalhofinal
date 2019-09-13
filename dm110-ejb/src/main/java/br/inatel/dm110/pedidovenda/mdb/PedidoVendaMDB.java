@@ -1,12 +1,18 @@
 package br.inatel.dm110.pedidovenda.mdb;
 
+import java.time.LocalDate;
+
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
+import br.inatel.dm110.log.dao.LogDAO;
+import br.inatel.dm110.log.entities.Log;
+import br.inatel.dm110.pedidovenda.dao.PedidoVendaDAO;
 import br.inatel.dm110.pedidovenda.to.PedidoVendaTO;
 
 @MessageDriven(activationConfig = {
@@ -28,6 +34,9 @@ import br.inatel.dm110.pedidovenda.to.PedidoVendaTO;
 })
 
 public class PedidoVendaMDB implements MessageListener {
+	
+	@EJB
+	private LogDAO dao;
 
 	@Override
 	public void onMessage(Message pedidovenda) {
@@ -50,6 +59,19 @@ public class PedidoVendaMDB implements MessageListener {
 					Thread.sleep(1500);
 					
 					System.out.println("Recebendo objeto: "+ pedidoVendaTO.toString());
+					
+					
+					
+					Log log = new Log();
+					
+					log.setId(1);
+					log.setCodigo(Integer.toString(pedidoVendaTO.getCodigo()));
+					log.setOperacao("Operacao Default");
+					log.setData(LocalDate.now());
+					
+					dao.insert(log);
+					
+					System.out.println(log.toString());
 					
 					Thread.sleep(1500);
 

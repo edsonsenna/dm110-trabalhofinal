@@ -74,6 +74,8 @@ public class PedidoVendaBean implements IPedidoVendaLocal, IPedidoVendaRemote{
 		
 		dao.insert(pv);
 		
+		this.sendStateCreated(pedidovenda);
+		
 	}
 
 	@Override
