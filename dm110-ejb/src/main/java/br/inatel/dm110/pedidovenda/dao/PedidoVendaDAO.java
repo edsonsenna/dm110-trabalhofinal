@@ -28,12 +28,15 @@ public class PedidoVendaDAO {
 		em.merge(pedido);
 	}
 
+	public void remove(int codigo) {
+		PedidoVenda p = em.find(PedidoVenda.class, codigo);
+		if (p != null)
+			em.remove(p);
+	}
+
 	public PedidoVenda buscaUnico(int codigo) {
-
 		PedidoVenda pedidovenda = em.find(PedidoVenda.class, codigo);
-
 		System.out.println("Retorno DAO => " + pedidovenda);
-
 		return pedidovenda;
 	}
 

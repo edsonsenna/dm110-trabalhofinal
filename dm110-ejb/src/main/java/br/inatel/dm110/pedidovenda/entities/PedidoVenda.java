@@ -14,15 +14,11 @@ import javax.persistence.Table;
 @Table(name = "pedido_venda")
 public class PedidoVenda implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	// @SequenceGenerator(name = "pedido_venda_cod_seq", initialValue = 1,
-	// allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pedido_venda_cod_seq")
+	@SequenceGenerator(name = "pedido_venda_cod_seq", initialValue = 1, allocationSize = 1)
 	private int codigo;
 	private int codigo_produto;
 	private String cpf_cliente;

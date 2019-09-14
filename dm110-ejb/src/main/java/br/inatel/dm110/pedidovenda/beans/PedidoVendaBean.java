@@ -105,6 +105,12 @@ public class PedidoVendaBean implements IPedidoVendaLocal, IPedidoVendaRemote {
 		return pv;
 	}
 
+	@Override
+	public void remove(int codigo) {
+		dao.remove(codigo);
+		this.sendStateRemoved(codigo);
+	}
+
 	public void sendStateCreated(PedidoVendaTO pedido) {
 
 		System.out.println("pedido created!");
@@ -115,9 +121,9 @@ public class PedidoVendaBean implements IPedidoVendaLocal, IPedidoVendaRemote {
 			Session session = conn.createSession();
 
 			MessageProducer producer = session.createProducer(queue);
-			
+
 			Log log = new Log();
-			
+
 			log.setCodigo(Integer.toString(pedido.getCodigo()));
 			log.setOperacao("Insercao");
 			log.setData(LocalDate.now());
@@ -142,11 +148,38 @@ public class PedidoVendaBean implements IPedidoVendaLocal, IPedidoVendaRemote {
 			Session session = conn.createSession();
 
 			MessageProducer producer = session.createProducer(queue);
-			
+
 			Log log = new Log();
-			
+
 			log.setCodigo(Integer.toString(pedido.getCodigo()));
 			log.setOperacao("Atualizacao");
+			log.setData(LocalDate.now());
+
+			ObjectMessage msg = session.createObjectMessage(log);
+
+			producer.send(msg);
+
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void sendStateRemoved(int codigo) {
+
+		System.out.println("pedido removed!");
+
+		try {
+			Connection conn = connFactory.createConnection();
+
+			Session session = conn.createSession();
+
+			MessageProducer producer = session.createProducer(queue);
+
+			Log log = new Log();
+
+			log.setCodigo(Integer.toString(codigo));
+			log.setOperacao("Remoção");
 			log.setData(LocalDate.now());
 
 			ObjectMessage msg = session.createObjectMessage(log);

@@ -15,4 +15,6 @@ public interface IPedidoVenda {
 	
 	public PedidoVendaTO buscaUnico(int codigo);
 	
+	public void remove(int pedido);
+	
 }
